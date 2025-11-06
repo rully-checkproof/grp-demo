@@ -5,6 +5,10 @@
 *.so
 *.dylib
 
+# Project specific binaries
+client
+server
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -76,6 +80,8 @@ tmp/
 
 # VS Code
 .vscode/
+
+# Kiro IDE files
 .kiro/
 
 # Emacs
