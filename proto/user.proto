@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package user;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "example.com/user/proto;proto";
+
+// Service definition - interface of our API
+service UserService {
+  // Simple request-response
+  rpc GetUser (UserRequest) returns (UserResponse);
+  
+  // Create user
+  rpc CreateUser (CreateUserRequest) returns (UserResponse);
+  
+  // Update user
+  rpc UpdateUser (UpdateUserRequest) returns (UserResponse);
+  
+  // Delete user
+  rpc DeleteUser (UserRequest) returns (google.protobuf.Empty);
+  
+  // Server-side streaming - user list
+  rpc StreamUsers (UserFilter) returns (stream UserResponse);
+  
+  // Client-side streaming - bulk user creation
+  rpc CreateUsers (stream CreateUserRequest) returns (BulkCreateResponse);
+  
+  // Bidirectional streaming - real-time messaging
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+// Message structures
+message UserRequest {
+  int32 id = 1;  // Field numbers - NEVER change them!
+}
+
+message UserResponse {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  string role = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  string role = 4;
+}
+
+message UpdateUserRequest {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  string role = 4;
+}
+
+message UserFilter {
+  string keyword = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  repeated string roles = 4;
+}
+
+message BulkCreateResponse {
+  int32 created_count = 1;
+  repeated int32 user_ids = 2;
+  repeated string errors = 3;
+}
+
+message ChatMessage {
+  string from = 1;
+  string to = 2;
+  string message = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  MessageType type = 5;
+}
+
+enum MessageType {
+  MESSAGE_TYPE_UNKNOWN = 0;
+  MESSAGE_TYPE_TEXT = 1;
+  MESSAGE_TYPE_FILE = 2;
+  MESSAGE_TYPE_IMAGE = 3;
+}
+
