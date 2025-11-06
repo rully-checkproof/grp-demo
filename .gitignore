@@ -76,6 +76,7 @@ tmp/
 
 # VS Code
 .vscode/
+.kiro/
 
 # Emacs
 *~
